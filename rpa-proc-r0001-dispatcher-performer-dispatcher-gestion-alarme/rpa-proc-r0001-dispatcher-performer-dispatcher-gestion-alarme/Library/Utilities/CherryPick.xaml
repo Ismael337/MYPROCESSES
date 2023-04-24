@@ -1,0 +1,225 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="CherryPick" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Interval" Type="InArgument(x:String)" />
+    <x:Property Name="io_dt_TransactionData" Type="InOutArgument(sd:DataTable)" />
+  </x:Members>
+  <this:CherryPick.in_Interval>
+    <InArgument x:TypeArguments="x:String" />
+  </this:CherryPick.in_Interval>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1650,2132</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>CherryPick_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="28">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="28">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Description: Pick an interval x-x or first x rows of a datatable&#xA;&#xA;Pre Condition: N/A&#xA;Post Condtion: Return a datatable with specific rows in interval" DisplayName="CherryPick" sap:VirtualizedContainerService.HintSize="1660,2067" sap2010:WorkflowViewState.IdRef="Sequence_4">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:Int32[]" Name="Interval" />
+      <Variable x:TypeArguments="x:Int32" Name="StartInterval" />
+      <Variable x:TypeArguments="x:Int32" Name="EndInterval" />
+      <Variable x:TypeArguments="x:Int32" Name="NbRow" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dt_CherryPick" />
+      <Variable x:TypeArguments="x:Int32" Name="MaxItem" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message (CherryPick)" sap:VirtualizedContainerService.HintSize="1618,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;[CherryPick Start...]&quot;]" />
+    <Assign DisplayName="Assign dtCherryPick" sap:VirtualizedContainerService.HintSize="1618,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[dt_CherryPick]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[io_dt_TransactionData.clone]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[Not in_Interval.Equals(&quot;Null&quot;)]" DisplayName="If Not Null" sap:VirtualizedContainerService.HintSize="1618,1541" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <Sequence DisplayName="Not Null" sap:VirtualizedContainerService.HintSize="1239,1393" sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message (CherryPick actived)" sap:VirtualizedContainerService.HintSize="1197,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;&gt; La fonctionnalité CherryPick a été activée&quot;]" />
+          <If Condition="[in_Interval.Contains(&quot;-&quot;)]" DisplayName="If Interval contains" sap:VirtualizedContainerService.HintSize="1197,1070" sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Then>
+              <Sequence DisplayName="Is interval" sap:VirtualizedContainerService.HintSize="576,922" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="Assign startInterval" sap:VirtualizedContainerService.HintSize="534,60" sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[StartInterval]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[Cint(in_Interval.Split("-".ToCharArray)(0))]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign DisplayName="Assign endInterval" sap:VirtualizedContainerService.HintSize="534,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[EndInterval]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[(Cint(in_Interval.Split("-".ToCharArray)(1)) - StartInterval) + 1]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign DisplayName="Assign StartInterval" sap:VirtualizedContainerService.HintSize="534,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[StartInterval]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[StartInterval - 2]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign DisplayName="Assign interval" sap:VirtualizedContainerService.HintSize="534,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="s:Int32[]">[Interval]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="s:Int32[]">[Enumerable.Range(StartInterval, EndInterval).ToArray]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:ForEachRow CurrentIndex="[NbRow]" DataTable="[io_dt_TransactionData]" DisplayName="For Each Row in TransactionData" sap:VirtualizedContainerService.HintSize="534,430" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                  <ui:ForEachRow.Body>
+                    <ActivityAction x:TypeArguments="sd:DataRow">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                      </ActivityAction.Argument>
+                      <If Condition="[Interval.Contains(NbRow)]" DisplayName="If Interval contains NbRow" sap:VirtualizedContainerService.HintSize="484,282" sap2010:WorkflowViewState.IdRef="If_1">
+                        <If.Then>
+                          <InvokeMethod DisplayName="Invoke Method Interval contains NbRow" sap:VirtualizedContainerService.HintSize="238,134" sap2010:WorkflowViewState.IdRef="InvokeMethod_1" MethodName="ImportRow">
+                            <InvokeMethod.TargetObject>
+                              <InArgument x:TypeArguments="sd:DataTable">[dt_CherryPick]</InArgument>
+                            </InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                          </InvokeMethod>
+                        </If.Then>
+                      </If>
+                    </ActivityAction>
+                  </ui:ForEachRow.Body>
+                </ui:ForEachRow>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="maxItem to pick" sap:VirtualizedContainerService.HintSize="576,622" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="Assign maxItem" sap:VirtualizedContainerService.HintSize="534,60" sap2010:WorkflowViewState.IdRef="Assign_6">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[MaxItem]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[Cint(in_Interval.ToString)]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:ForEachRow CurrentIndex="[NbRow]" DataTable="[io_dt_TransactionData]" DisplayName="For Each Row NbRow less MaxItem" sap:VirtualizedContainerService.HintSize="534,430" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+                  <ui:ForEachRow.Body>
+                    <ActivityAction x:TypeArguments="sd:DataRow">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                      </ActivityAction.Argument>
+                      <If Condition="[NbRow &lt; MaxItem]" DisplayName="If NbRow less than MaxItem" sap:VirtualizedContainerService.HintSize="484,282" sap2010:WorkflowViewState.IdRef="If_2">
+                        <If.Then>
+                          <InvokeMethod DisplayName="Invoke Method NbRow less than MaxItem" sap:VirtualizedContainerService.HintSize="238,134" sap2010:WorkflowViewState.IdRef="InvokeMethod_2" MethodName="ImportRow">
+                            <InvokeMethod.TargetObject>
+                              <InArgument x:TypeArguments="sd:DataTable">[dt_CherryPick]</InArgument>
+                            </InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                          </InvokeMethod>
+                        </If.Then>
+                      </If>
+                    </ActivityAction>
+                  </ui:ForEachRow.Body>
+                </ui:ForEachRow>
+              </Sequence>
+            </If.Else>
+          </If>
+          <Assign DisplayName="Assign io_TransactionData" sap:VirtualizedContainerService.HintSize="1197,60" sap2010:WorkflowViewState.IdRef="Assign_7">
+            <Assign.To>
+              <OutArgument x:TypeArguments="sd:DataTable">[io_dt_TransactionData]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="sd:DataTable">[dt_CherryPick]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log Message (CherryPick not actived)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;&gt; La fonctionnalité CherryPick n'a pas été activée&quot;]" />
+      </If.Else>
+    </If>
+    <ui:LogMessage DisplayName="Log Message (CherryPick End)" sap:VirtualizedContainerService.HintSize="1618,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;[CherryPick End]&quot;]" />
+  </Sequence>
+</Activity>

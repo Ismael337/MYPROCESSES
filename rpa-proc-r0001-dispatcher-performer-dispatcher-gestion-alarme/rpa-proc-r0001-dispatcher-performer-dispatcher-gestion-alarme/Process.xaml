@@ -1,0 +1,1337 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Process" this:Process.in_AudaceBaseUrlHttpRequest="https://ws-audace.crillon.ratp/secure/api/v1/etat-equipement/" this:Process.in_AudaceCheminCertficatSSL="Data\Input\AudaceSSL\rpa_prod.pfx" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:sd1="clr-namespace:System.Drawing;assembly=System.Drawing" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Transaction item to be processed." Name="in_TransactionItem" Type="InArgument(ui:QueueItem)" />
+    <x:Property sap2010:Annotation.AnnotationText="Dictionary structure to store configuration data of the process (settings, constants and assets)." Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="io_GarbageCollector" Type="InOutArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_dt_TableMetier" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_AudaceBaseUrlHttpRequest" Type="InArgument(x:String)" />
+    <x:Property Name="in_AudaceCheminCertficatSSL" Type="InArgument(x:String)" />
+  </x:Members>
+  <this:Process.in_dt_TableMetier>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:Process.in_dt_TableMetier>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1307,1427</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="32">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>Microsoft.Activities.Extensions.Statements</x:String>
+      <x:String>System.Reflection</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="31">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.Activities.Extensions</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart sap2010:Annotation.AnnotationText="Invoke major steps of the business process, which are usually implemented by multiple subworkflows.&#xA;&#xA;If a BusinessRuleException is thrown, the transaction is skipped. &#xA;If another kind of exception occurs, the current transaction can be retried. " DisplayName="Process" sap:VirtualizedContainerService.HintSize="1174,1362" sap2010:WorkflowViewState.IdRef="Flowchart_2">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="AudaceCodeRetour" />
+      <Variable x:TypeArguments="x:String" Name="AudaceResultJson" />
+      <Variable x:TypeArguments="x:String" Name="AudaceCodeErreur" />
+      <Variable x:TypeArguments="x:String" Name="AudaceSuccess" />
+      <Variable x:TypeArguments="x:String" Name="AudaceLibelle" />
+      <Variable x:TypeArguments="sd1:Rectangle" Name="AgoraCheckBoxXY" />
+      <Variable x:TypeArguments="x:Boolean" Name="AgoraCheckBoxStatutBool" />
+      <Variable x:TypeArguments="x:Int32" Name="RetryScopeNumberGeneral" />
+    </Flowchart.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <av:Point x:Key="ShapeLocation">120,2.5</av:Point>
+        <av:Size x:Key="ShapeSize">60,75</av:Size>
+        <av:PointCollection x:Key="ConnectorLocation">150,77.7 150,126</av:PointCollection>
+        <x:Double x:Key="Width">1140</x:Double>
+        <x:Double x:Key="Height">1254.04</x:Double>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart.StartNode>
+      <x:Reference>__ReferenceID13</x:Reference>
+    </Flowchart.StartNode>
+    <FlowStep x:Name="__ReferenceID13">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">50,126</av:Point>
+          <av:Size x:Key="ShapeSize">200,108</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">250,180 310,180</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Sequence sap2010:Annotation.AnnotationText="Initialisation Garbage Collector Agora et Audace" DisplayName="Init Agora and Audace Infos" sap:VirtualizedContainerService.HintSize="200,108" sap2010:WorkflowViewState.IdRef="Sequence_30">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:LogMessage DisplayName="Log message (Process Start...)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Trace" Message="[&quot;[Process Start...]&quot;]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:LogMessage>
+        <ui:MultipleAssign DisplayName="Initialisation des Infos Agora &amp; Audace" sap:VirtualizedContainerService.HintSize="334,408" sap2010:WorkflowViewState.IdRef="MultipleAssign_4">
+          <ui:MultipleAssign.AssignOperations>
+            <scg:List x:TypeArguments="ui:AssignOperation" Capacity="16">
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_37">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraDateConstatee")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_38">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceCodeRetour")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_39">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceCodeAlarme")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_40">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceTypeIntervenant")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_41">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_42">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceGravite")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_43">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceGeneral")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_50">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraStatutAvantTraitement")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_52">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraStatutApresTraitement")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_51">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceStatut")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[""]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+              <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_53">
+                <ui:AssignOperation.To>
+                  <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraBoiteReceptionNom")]</OutArgument>
+                </ui:AssignOperation.To>
+                <ui:AssignOperation.Value>
+                  <InArgument x:TypeArguments="x:Object">[in_Config("AgoraBoiteReceptionNom").ToString]</InArgument>
+                </ui:AssignOperation.Value>
+              </ui:AssignOperation>
+            </scg:List>
+          </ui:MultipleAssign.AssignOperations>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:MultipleAssign>
+      </Sequence>
+      <FlowStep.Next>
+        <FlowStep x:Name="__ReferenceID8">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <av:Point x:Key="ShapeLocation">310,126</av:Point>
+              <av:Size x:Key="ShapeSize">200,108</av:Size>
+              <av:PointCollection x:Key="ConnectorLocation">510,180 590,180</av:PointCollection>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Recherche de l'OT dans Agora. Affichage de la page de l'OT" DisplayName="Invoke AgoraSearchOrdreDeTravail workflow" sap:VirtualizedContainerService.HintSize="200,108" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Library\Agora\AgoraSearchOrdreDeTravail.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="in_AgoraOrdreDeTravail">[in_TransactionItem.SpecificContent("Ordre de Travail").ToString]</InArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[in_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <FlowStep.Next>
+            <FlowStep x:Name="__ReferenceID10">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <av:Point x:Key="ShapeLocation">590,103.5</av:Point>
+                  <av:Size x:Key="ShapeSize">200,153</av:Size>
+                  <av:PointCollection x:Key="ConnectorLocation">790,180 860,180</av:PointCollection>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Sequence sap2010:Annotation.AnnotationText="Récupération des champs de l'OT dans Agora:&#xA;&#xA;- Date Constatée&#xA;- Statut" DisplayName="Invoke AgoraGetInfos workflow" sap:VirtualizedContainerService.HintSize="200,153" sap2010:WorkflowViewState.IdRef="Sequence_93">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:String" Name="AgoraStatutAvantTraitement" />
+                  <Variable x:TypeArguments="x:String" Name="AgoraDateConstatee" />
+                </Sequence.Variables>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraGetValueRequiered workflow" sap:VirtualizedContainerService.HintSize="364,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_10" UnSafe="False" WorkflowFileName="Library\Agora\AgoraGetValueRequiredField.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_Value">[AgoraStatutAvantTraitement]</OutArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="in_AANameValueRequired">Statut</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <Assign DisplayName="Assign Statut avant Traitement GarbageCollector" sap:VirtualizedContainerService.HintSize="364,60" sap2010:WorkflowViewState.IdRef="Assign_59">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraStatutAvantTraitement")]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Object">[AgoraStatutAvantTraitement]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraGetValue workflow" sap:VirtualizedContainerService.HintSize="364,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_11" UnSafe="False" WorkflowFileName="Library\Agora\AgoraGetValue.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_Value">[AgoraDateConstatee]</OutArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="in_AANameTextField">Date constatée</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="in_AANameComboBox" />
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <Assign DisplayName="Assign AgoraDateConstatee GarbageCollector" sap:VirtualizedContainerService.HintSize="364,60" sap2010:WorkflowViewState.IdRef="Assign_60">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraDateConstatee")]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Object">[AgoraDateConstatee]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+              <FlowStep.Next>
+                <FlowStep x:Name="__ReferenceID11">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <av:Point x:Key="ShapeLocation">860,118.5</av:Point>
+                      <av:Size x:Key="ShapeSize">200,123</av:Size>
+                      <av:PointCollection x:Key="ConnectorLocation">960,241.5 960,293.5</av:PointCollection>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Sequence sap2010:Annotation.AnnotationText="Vérification de la disponibilité du Webservice « etat-equipement »" DisplayName="AudaceCheckRequestHTTP" sap:VirtualizedContainerService.HintSize="407,377" sap2010:WorkflowViewState.IdRef="Sequence_94">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Vérification de la disponibilité du Webservice « etat-equipement »" DisplayName="Invoke AudaceCheckRequestHTTP workflow" sap:VirtualizedContainerService.HintSize="365,154" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="Library\Audace\AudaceCheckRequestHTTP.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_AudaceCheminCertficatSSL">[in_AudaceCheminCertficatSSL]</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_AudaceBaseUrlHttpRequest">[in_AudaceBaseUrlHttpRequest]</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_AudaceUrlParamHttpRequest">[in_TransactionItem.SpecificContent("Bien Maintenu").ToString]</InArgument>
+                        <OutArgument x:TypeArguments="x:Int32" x:Key="out_AudaceCodeHttpRequest">[AudaceCodeRetour]</OutArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_ExceptionMessageHTTP">La requête HTTP du Web Service état-equipement ne répond pas</InArgument>
+                        <OutArgument x:TypeArguments="x:String" x:Key="out_AudaceResultJsonStr">[AudaceResultJson]</OutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:InvokeWorkflowFile>
+                    <Assign DisplayName="Assign Garbage Collector Audace Code retour" sap:VirtualizedContainerService.HintSize="365,60" sap2010:WorkflowViewState.IdRef="Assign_61">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceCodeRetour")]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Object">[AudaceCodeRetour]</InArgument>
+                      </Assign.Value>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </Assign>
+                  </Sequence>
+                  <FlowStep.Next>
+                    <FlowStep x:Name="__ReferenceID9">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <av:Point x:Key="ShapeLocation">860,293.5</av:Point>
+                          <av:Size x:Key="ShapeSize">200,213</av:Size>
+                          <av:PointCollection x:Key="ConnectorLocation">860,400 457,400 457,446.5</av:PointCollection>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Vérification de la réponse d'Audace:&#xA;&#xA;- Si « True » la réponse renvoie les données attendues &#xA; - Si « False », la réponse renvoie une erreur applicative avec pour code 1000X&#xA;" DisplayName="Invoke AudaceCheckResponse workflow" sap:VirtualizedContainerService.HintSize="200,213" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Library\Audace\AudaceCheckResponse.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_AudaceResultJsonStr">[AudaceResultJson]</InArgument>
+                          <OutArgument x:TypeArguments="x:String" x:Key="out_AudaceCodeErreur">[AudaceCodeErreur]</OutArgument>
+                          <OutArgument x:TypeArguments="x:String" x:Key="out_AudaceSuccess">[AudaceSuccess]</OutArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:InvokeWorkflowFile>
+                      <FlowStep.Next>
+                        <FlowDecision x:Name="__ReferenceID1" Condition="[AudaceSuccess.Equals(&quot;True&quot;)]" DisplayName="Audace Success ?" sap:VirtualizedContainerService.HintSize="98,87" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <av:Point x:Key="ShapeLocation">408,446.5</av:Point>
+                              <av:Size x:Key="ShapeSize">98,87</av:Size>
+                              <av:PointCollection x:Key="TrueConnector">408,490 240,490</av:PointCollection>
+                              <av:PointCollection x:Key="FalseConnector">505.6,490.1 730.2,490.1 730.2,576.5</av:PointCollection>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <FlowDecision.True>
+                            <FlowStep x:Name="__ReferenceID6">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">40,436</av:Point>
+                                  <av:Size x:Key="ShapeSize">200,108</av:Size>
+                                  <av:PointCollection x:Key="ConnectorLocation">140,544 140,687.6</av:PointCollection>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Sequence sap2010:Annotation.AnnotationText="Extraction des informations d'Audace" DisplayName="Extraction des informations d'Audace" sap:VirtualizedContainerService.HintSize="200,108" sap2010:WorkflowViewState.IdRef="Sequence_37">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message (Extraction des informations d'Audace)" sap:VirtualizedContainerService.HintSize="368,91" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Info" Message="[&quot;Extraction des informations d'Audace&quot;]" />
+                                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AudaceExtractDataWsEquip workflow" sap:VirtualizedContainerService.HintSize="368,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Library\Audace\AudaceExtractDataWsEquip.xaml">
+                                  <ui:InvokeWorkflowFile.Arguments>
+                                    <InArgument x:TypeArguments="x:String" x:Key="in_AudaceResultJsonStr">[AudaceResultJson]</InArgument>
+                                    <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="io_GarbageCollector">[io_GarbageCollector]</InOutArgument>
+                                    <InArgument x:TypeArguments="x:String" x:Key="in_AudaceBienMaintenu">[in_TransactionItem.SpecificContent("Bien Maintenu").ToString]</InArgument>
+                                    <InArgument x:TypeArguments="x:String" x:Key="in_AudaceOrdreDeTravail">[in_TransactionItem.SpecificContent("Ordre de Travail").ToString]</InArgument>
+                                  </ui:InvokeWorkflowFile.Arguments>
+                                </ui:InvokeWorkflowFile>
+                              </Sequence>
+                              <FlowStep.Next>
+                                <FlowStep x:Name="__ReferenceID7">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <av:Point x:Key="ShapeLocation">40,687.6</av:Point>
+                                      <av:Size x:Key="ShapeSize">200,138</av:Size>
+                                      <av:PointCollection x:Key="ConnectorLocation">140,825.6 140,1070 350,1070</av:PointCollection>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Switch x:TypeArguments="x:String" sap2010:Annotation.AnnotationText="Code Général et Statut Audace:&#xA;E = En service   &#xA;H = Hors service   &#xA;I = Inconnu" DisplayName="Traitement Code Général et Statut Audace" Expression="[io_GarbageCollector(&quot;AudaceGeneral&quot;).ToString]" sap:VirtualizedContainerService.HintSize="200,138" sap2010:WorkflowViewState.IdRef="Switch`1_4">
+                                    <Switch.Default>
+                                      <Sequence DisplayName="Code général &quot;Non défini&quot;" sap:VirtualizedContainerService.HintSize="476,726" sap2010:WorkflowViewState.IdRef="Sequence_84">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:LogMessage DisplayName="Log Message (Code général non défini)" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_63" Level="Warn" Message="[&quot;Le Code Général est: &quot;+io_GarbageCollector(&quot;AudaceGeneral&quot;).ToString+&quot; donc le Statut Audace est non défini&quot;]" />
+                                        <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Code général &quot;Non défini&quot;" sap:VirtualizedContainerService.HintSize="434,503" sap2010:WorkflowViewState.IdRef="BrowserScope_11" InformativeScreenshot="20916d4e5264662cbf5ed512f04b5d91" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                          <ui:BrowserScope.Body>
+                                            <ActivityAction x:TypeArguments="x:Object">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Do Code général &quot;Non défini&quot;" sap:VirtualizedContainerService.HintSize="376,357" sap2010:WorkflowViewState.IdRef="Sequence_83">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <ui:LogMessage DisplayName="Log Message (Saisie du Commentaire OT pour le cas Non défini)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_58" Level="Info" Message="[&quot;Changement du Statut Agora en: &quot;+in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                                <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut Code général &quot;Non défini&quot;" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_21" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                                  <ui:TypeInto.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="91e5ed3c-79ae-472c-9f74-71cc2c837a42" InformativeScreenshot="ed2edd2ce16f45afc05eecfba4536571" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' /&gt;" WaitForReady="COMPLETE">
+                                                      <ui:Target.TimeoutMS>
+                                                        <InArgument x:TypeArguments="x:Int32" />
+                                                      </ui:Target.TimeoutMS>
+                                                    </ui:Target>
+                                                  </ui:TypeInto.Target>
+                                                </ui:TypeInto>
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:BrowserScope.Body>
+                                        </ui:BrowserScope>
+                                      </Sequence>
+                                    </Switch.Default>
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <Sequence x:Key="E" DisplayName="Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="957,2631" sap2010:WorkflowViewState.IdRef="Sequence_74">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message (Code général En Srevice)" sap:VirtualizedContainerService.HintSize="915,91" sap2010:WorkflowViewState.IdRef="LogMessage_59" Level="Info" Message="[&quot;Le Code Général est: &quot;+io_GarbageCollector(&quot;AudaceGeneral&quot;).ToString+&quot; donc le Statut Audace est En service&quot;]" />
+                                      <Assign DisplayName="Indique que le BM est en service" sap:VirtualizedContainerService.HintSize="915,60" sap2010:WorkflowViewState.IdRef="Assign_39">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceStatut")]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Object">["En service"]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:RetryScope DisplayName="Retry Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="915,2308" sap2010:WorkflowViewState.IdRef="RetryScope_4" NumberOfRetries="3" RetryInterval="00:00:05">
+                                        <ui:RetryScope.ActivityBody>
+                                          <ActivityAction>
+                                            <Sequence DisplayName="Retry Scope Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="873,2134" sap2010:WorkflowViewState.IdRef="Sequence_73">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <If Condition="[RetryScopeNumberGeneral &lt;&gt; 0]" DisplayName="If Failed Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="831,238" sap2010:WorkflowViewState.IdRef="If_8">
+                                                <If.Then>
+                                                  <ui:LogMessage DisplayName="Log Message Failed Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_39" Level="Warn" Message="[&quot;&gt; Retry Number &quot; + RetryScopeNumberGeneral.ToString + &quot; Code général: En service&quot;]" />
+                                                </If.Then>
+                                              </If>
+                                              <Assign DisplayName="Increment retryScopeNumber Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="831,60" sap2010:WorkflowViewState.IdRef="Assign_40">
+                                                <Assign.To>
+                                                  <OutArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral]</OutArgument>
+                                                </Assign.To>
+                                                <Assign.Value>
+                                                  <InArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral + 1]</InArgument>
+                                                </Assign.Value>
+                                              </Assign>
+                                              <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="831,1664" sap2010:WorkflowViewState.IdRef="BrowserScope_8" InformativeScreenshot="e5ff68584551b53be2a52d2b9c9ff35f" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                                <ui:BrowserScope.Body>
+                                                  <ActivityAction x:TypeArguments="x:Object">
+                                                    <ActivityAction.Argument>
+                                                      <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                    </ActivityAction.Argument>
+                                                    <Sequence DisplayName="Do Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="797,1518" sap2010:WorkflowViewState.IdRef="Sequence_72">
+                                                      <sap:WorkflowViewStateService.ViewState>
+                                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                        </scg:Dictionary>
+                                                      </sap:WorkflowViewStateService.ViewState>
+                                                      <ui:LogMessage DisplayName="Log Message (Saisie du Commentaire OT pour le cas En Service)" sap:VirtualizedContainerService.HintSize="755,91" sap2010:WorkflowViewState.IdRef="LogMessage_55" Level="Info" Message="[&quot;Saisie du Commentaire OT Agora en: &quot;+&quot;|Audace| En Service&quot;]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Champ &quot;Commentaire OT&quot; dans AGORA" EmptyField="True" sap:VirtualizedContainerService.HintSize="755,134" sap2010:WorkflowViewState.IdRef="TypeInto_14" Text="|Audace| En Service">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="1a99a6c0-5e6a-4ef6-9a12-e0c35b33127a" InformativeScreenshot="a82d5a888e3e90e388ab76eecc2ef80f" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                      <ui:LogMessage DisplayName="Log Message (Changement Statut Agora pour le cas En Service)" sap:VirtualizedContainerService.HintSize="755,91" sap2010:WorkflowViewState.IdRef="LogMessage_56" Level="Info" Message="[&quot;Changement du Statut Agora en: &quot;+in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="755,134" sap2010:WorkflowViewState.IdRef="TypeInto_15" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="91e5ed3c-79ae-472c-9f74-71cc2c837a42" InformativeScreenshot="ed2edd2ce16f45afc05eecfba4536571" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                      <ui:GetPosition ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Recherche les coordonées X,Y de la checkbox 'Pas d'arrêt'" DisplayName="Position X,Y de la checkbox 'Pas d'arrêt' dans Agora Code général &quot;En service&quot;" sap:VirtualizedContainerService.HintSize="755,148" sap2010:WorkflowViewState.IdRef="GetPosition_4" Rectangle="[AgoraCheckBoxXY]">
+                                                        <ui:GetPosition.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="efc6255b-61ee-4d7a-be59-010e02a5f0c6" InformativeScreenshot="86429c6cb2492db3db57543a07f3043a" Selector="&lt;webctrl tag='INPUT' type='button' aaname='Pas d&amp;apos;arrêt:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:GetPosition.Target>
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                      </ui:GetPosition>
+                                                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraColorCheckBox workflow" sap:VirtualizedContainerService.HintSize="755,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Library\Agora\AgoraColorCheckBox.xaml">
+                                                        <ui:InvokeWorkflowFile.Arguments>
+                                                          <OutArgument x:TypeArguments="x:Boolean" x:Key="out_AgoraCheckBoxStatutBool">[AgoraCheckBoxStatutBool]</OutArgument>
+                                                          <InArgument x:TypeArguments="sd1:Rectangle" x:Key="in_AgoraCheckBoxXY">[AgoraCheckBoxXY]</InArgument>
+                                                        </ui:InvokeWorkflowFile.Arguments>
+                                                      </ui:InvokeWorkflowFile>
+                                                      <If Condition="[AgoraCheckBoxStatutBool]" DisplayName="Contrôle si la CheckBox 'Pas d'arrêt' est coché ou non" sap:VirtualizedContainerService.HintSize="755,476" sap2010:WorkflowViewState.IdRef="If_9">
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                        <If.Then>
+                                                          <ui:LogMessage DisplayName="Message BM en service est case coché" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_40" Level="Info" Message="[&quot;&gt; Traitement BM : Le BM est 'En Service' et la case est déjà cochée&quot;]" />
+                                                        </If.Then>
+                                                        <If.Else>
+                                                          <Sequence DisplayName="La case pas d'arrêt n'est pas coché" sap:VirtualizedContainerService.HintSize="376,329" sap2010:WorkflowViewState.IdRef="Sequence_71">
+                                                            <sap:WorkflowViewStateService.ViewState>
+                                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                              </scg:Dictionary>
+                                                            </sap:WorkflowViewStateService.ViewState>
+                                                            <ui:LogMessage DisplayName="Message BM en service est case non coché" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_41" Level="Info" Message="[&quot;&gt; Traitement BM : Le BM est 'En Service' = Le robot coche la case 'Pas d'arrêt'&quot;]" />
+                                                            <ui:Click AlterIfDisabled="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Coche la case &quot;Pas d'arrêt&quot;" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT">
+                                                              <ui:Click.CursorPosition>
+                                                                <ui:CursorPosition Position="Center">
+                                                                  <ui:CursorPosition.OffsetX>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:CursorPosition.OffsetX>
+                                                                  <ui:CursorPosition.OffsetY>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:CursorPosition.OffsetY>
+                                                                </ui:CursorPosition>
+                                                              </ui:Click.CursorPosition>
+                                                              <ui:Click.Target>
+                                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="9357d9c3-c1cb-40fc-92f8-cd8431b80a17" InformativeScreenshot="c279335442e6ae5a2b359470febdfa32" Selector="&lt;webctrl id='checkboxfield-*-inputEl' tag='INPUT' type='button' aaname='Pas d&amp;apos;arrêt:' /&gt;">
+                                                                  <ui:Target.TimeoutMS>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:Target.TimeoutMS>
+                                                                  <ui:Target.WaitForReady>
+                                                                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                                                                  </ui:Target.WaitForReady>
+                                                                </ui:Target>
+                                                              </ui:Click.Target>
+                                                            </ui:Click>
+                                                          </Sequence>
+                                                        </If.Else>
+                                                      </If>
+                                                    </Sequence>
+                                                  </ActivityAction>
+                                                </ui:BrowserScope.Body>
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                              </ui:BrowserScope>
+                                            </Sequence>
+                                          </ActivityAction>
+                                        </ui:RetryScope.ActivityBody>
+                                        <ui:RetryScope.Condition>
+                                          <ActivityFunc x:TypeArguments="x:Boolean" />
+                                        </ui:RetryScope.Condition>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:RetryScope>
+                                    </Sequence>
+                                    <Sequence x:Key="H" DisplayName="Code général &quot;Hors service&quot;  " sap:VirtualizedContainerService.HintSize="957,3814" sap2010:WorkflowViewState.IdRef="Sequence_79">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message (Code général Hors Srevice)" sap:VirtualizedContainerService.HintSize="915,91" sap2010:WorkflowViewState.IdRef="LogMessage_60" Level="Info" Message="[&quot;Le Code Général est: &quot;+io_GarbageCollector(&quot;AudaceGeneral&quot;).ToString+&quot; donc le Statut Audace est Hors service&quot;]" />
+                                      <Assign DisplayName="Assign GabageCollector Audace Statut Hors Service" sap:VirtualizedContainerService.HintSize="915,60" sap2010:WorkflowViewState.IdRef="Assign_41">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceStatut")]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Object">["Hors service"]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:RetryScope DisplayName="Retry Scope Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="915,3491" sap2010:WorkflowViewState.IdRef="RetryScope_5" NumberOfRetries="3" RetryInterval="00:00:05">
+                                        <ui:RetryScope.ActivityBody>
+                                          <ActivityAction>
+                                            <Sequence DisplayName="Retry Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="873,3317" sap2010:WorkflowViewState.IdRef="Sequence_78">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <If Condition="[RetryScopeNumberGeneral &lt;&gt; 0]" DisplayName="If Failed Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="831,238" sap2010:WorkflowViewState.IdRef="If_10">
+                                                <If.Then>
+                                                  <ui:LogMessage DisplayName="Log Message Failed Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_42" Level="Warn" Message="[&quot;Retry Number &quot; + RetryScopeNumberGeneral.ToString + &quot; Code général: En service&quot;]" />
+                                                </If.Then>
+                                              </If>
+                                              <Assign DisplayName="Increment retryScopeNumber Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="831,60" sap2010:WorkflowViewState.IdRef="Assign_42">
+                                                <Assign.To>
+                                                  <OutArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral]</OutArgument>
+                                                </Assign.To>
+                                                <Assign.Value>
+                                                  <InArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral + 1]</InArgument>
+                                                </Assign.Value>
+                                              </Assign>
+                                              <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="831,2847" sap2010:WorkflowViewState.IdRef="BrowserScope_9" InformativeScreenshot="e5ff68584551b53be2a52d2b9c9ff35f" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                                <ui:BrowserScope.Body>
+                                                  <ActivityAction x:TypeArguments="x:Object">
+                                                    <ActivityAction.Argument>
+                                                      <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                    </ActivityAction.Argument>
+                                                    <Sequence DisplayName="Code général &quot;Hors service&quot;" sap:VirtualizedContainerService.HintSize="797,2701" sap2010:WorkflowViewState.IdRef="Sequence_77">
+                                                      <Sequence.Variables>
+                                                        <Variable x:TypeArguments="x:String" Name="AgoraClassFieldStr" />
+                                                      </Sequence.Variables>
+                                                      <sap:WorkflowViewStateService.ViewState>
+                                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                        </scg:Dictionary>
+                                                      </sap:WorkflowViewStateService.ViewState>
+                                                      <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SpecialKey="{x:Null}" Activate="True" sap2010:Annotation.AnnotationText="Sélectionne le contenu du textearea (Le emptyField) ne fonctionne pas pour l'éffacement" DisplayName="Fait un Contrôle + A" sap:VirtualizedContainerService.HintSize="755,196" sap2010:WorkflowViewState.IdRef="SendHotkey_3" Key="a" KeyModifiers="Ctrl">
+                                                        <ui:SendHotkey.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="0376cd4f-d1ba-44a0-9d14-6e43ddc22aaa" InformativeScreenshot="d847ceaad7ef7582ae2aaf4672e8e943" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:SendHotkey.Target>
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                      </ui:SendHotkey>
+                                                      <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" sap2010:Annotation.AnnotationText="Supprime le contenu du champ 'Commentaires OT'" DisplayName="Touche D" sap:VirtualizedContainerService.HintSize="755,147" sap2010:WorkflowViewState.IdRef="SendHotkey_4" Key="del" KeyModifiers="None" SpecialKey="True">
+                                                        <ui:SendHotkey.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f674fc6e-9dc1-426c-90bf-507772fdbd71" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:SendHotkey.Target>
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                      </ui:SendHotkey>
+                                                      <ui:LogMessage DisplayName="Log Message (Saisie du Commentaire OT pour le cas Hors Service)" sap:VirtualizedContainerService.HintSize="755,91" sap2010:WorkflowViewState.IdRef="LogMessage_61" Level="Info" Message="[&quot;Changement du Commentaire OT Agora en: &quot;+&quot;|Audace| : Hors Service |&quot; + io_GarbageCollector(&quot;AudaceCodeAlarme&quot;).ToString + &quot;|&quot; + io_GarbageCollector(&quot;AudaceLibelle&quot;).ToString]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Inscription 'Hors Service' + Code alarme Audace &amp; libéllé" EmptyField="True" sap:VirtualizedContainerService.HintSize="755,134" sap2010:WorkflowViewState.IdRef="TypeInto_16" Text="[&quot;|Audace| : Hors Service |&quot; + io_GarbageCollector(&quot;AudaceCodeAlarme&quot;).ToString + &quot;|&quot; + io_GarbageCollector(&quot;AudaceLibelle&quot;).ToString]">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b4a7dbc2-8ec0-44b1-b6cb-d5c8365409c4" InformativeScreenshot="d847ceaad7ef7582ae2aaf4672e8e943" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                      <ui:LogMessage DisplayName="Log Message (Changement Statut Agora pour le cas Hors Service)" sap:VirtualizedContainerService.HintSize="755,91" sap2010:WorkflowViewState.IdRef="LogMessage_57" Level="Info" Message="[&quot;Changement du Statut Agora en: &quot;+in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut" sap:VirtualizedContainerService.HintSize="755,134" sap2010:WorkflowViewState.IdRef="TypeInto_17" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="91e5ed3c-79ae-472c-9f74-71cc2c837a42" InformativeScreenshot="a2538a85c167b024391e500f6dedd7d7" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                      <ui:GetPosition ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Recherche les coordonées X,Y de la checkbox 'Pas d'arrêt'" DisplayName="Position X,Y de la checkbox 'Pas d'arrêt' dans Agora" sap:VirtualizedContainerService.HintSize="755,148" sap2010:WorkflowViewState.IdRef="GetPosition_5" Rectangle="[AgoraCheckBoxXY]">
+                                                        <ui:GetPosition.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="efc6255b-61ee-4d7a-be59-010e02a5f0c6" InformativeScreenshot="9d2f3490e81ee70c12b8033fb7de86bb" Selector="&lt;webctrl tag='INPUT' type='button' aaname='Pas d&amp;apos;arrêt:' aria-role='checkbox' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:GetPosition.Target>
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                      </ui:GetPosition>
+                                                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraColorCheckBox workflow" sap:VirtualizedContainerService.HintSize="755,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Library\Agora\AgoraColorCheckBox.xaml">
+                                                        <ui:InvokeWorkflowFile.Arguments>
+                                                          <OutArgument x:TypeArguments="x:Boolean" x:Key="out_AgoraCheckBoxStatutBool">[AgoraCheckBoxStatutBool]</OutArgument>
+                                                          <InArgument x:TypeArguments="sd1:Rectangle" x:Key="in_AgoraCheckBoxXY">[AgoraCheckBoxXY]</InArgument>
+                                                        </ui:InvokeWorkflowFile.Arguments>
+                                                      </ui:InvokeWorkflowFile>
+                                                      <If Condition="[AgoraCheckBoxStatutBool]" DisplayName="Case 'pas d'arrêt' coché ou non ?" sap:VirtualizedContainerService.HintSize="755,476" sap2010:WorkflowViewState.IdRef="If_11">
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                        <If.Then>
+                                                          <Sequence DisplayName="La case est coché" sap:VirtualizedContainerService.HintSize="376,329" sap2010:WorkflowViewState.IdRef="Sequence_75">
+                                                            <sap:WorkflowViewStateService.ViewState>
+                                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                              </scg:Dictionary>
+                                                            </sap:WorkflowViewStateService.ViewState>
+                                                            <ui:LogMessage DisplayName="Log Message La case est coché" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_43" Level="Info" Message="[&quot;&gt; Traitement BM : Le BM est 'Hors Service' mais la case 'pas d'arrêt' est cochée = Le robot la décoche&quot;]" />
+                                                            <ui:Click AlterIfDisabled="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Décoche la case &quot;Pas d'arrêt&quot;" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT">
+                                                              <ui:Click.CursorPosition>
+                                                                <ui:CursorPosition Position="Center">
+                                                                  <ui:CursorPosition.OffsetX>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:CursorPosition.OffsetX>
+                                                                  <ui:CursorPosition.OffsetY>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:CursorPosition.OffsetY>
+                                                                </ui:CursorPosition>
+                                                              </ui:Click.CursorPosition>
+                                                              <ui:Click.Target>
+                                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a496afd5-a425-4b14-aa65-1a7e268845b6" InformativeScreenshot="69d977d3ff2e00c66fc424b961c78d94" Selector="&lt;webctrl id='checkboxfield-*-inputEl' tag='INPUT' type='button' aaname='Pas d&amp;apos;arrêt:' aria-role='checkbox' /&gt;">
+                                                                  <ui:Target.TimeoutMS>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:Target.TimeoutMS>
+                                                                  <ui:Target.WaitForReady>
+                                                                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                                                                  </ui:Target.WaitForReady>
+                                                                </ui:Target>
+                                                              </ui:Click.Target>
+                                                            </ui:Click>
+                                                          </Sequence>
+                                                        </If.Then>
+                                                        <If.Else>
+                                                          <ui:LogMessage DisplayName="Log Message La case n'est pas coché" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_44" Level="Info" Message="[&quot;&gt; Traitement BM : Le BM est 'Hors service' et la case 'Pas d'arrêt' n'est pas cochée&quot;]" />
+                                                        </If.Else>
+                                                      </If>
+                                                      <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="class" DisplayName="Le champ est-il éditable ?" sap:VirtualizedContainerService.HintSize="755,134" sap2010:WorkflowViewState.IdRef="GetAttribute_4">
+                                                        <ui:GetAttribute.Result>
+                                                          <OutArgument x:TypeArguments="x:String">[AgoraClassFieldStr]</OutArgument>
+                                                        </ui:GetAttribute.Result>
+                                                        <ui:GetAttribute.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="d4406a79-eaa7-4945-8d26-a55dfb509310" InformativeScreenshot="b8a7327fc1f471ca1f58e705bf0d44c6" Selector="&lt;webctrl aria-role='textbox' tag='INPUT' type='text' name='permfixpromisedate' aaname='Date/Heure mise en HS:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:GetAttribute.Target>
+                                                      </ui:GetAttribute>
+                                                      <If Condition="[AgoraClassFieldStr.Contains(&quot;noedit&quot;)]" DisplayName="If Le champ éditable ou pas ?" sap:VirtualizedContainerService.HintSize="755,546" sap2010:WorkflowViewState.IdRef="If_12">
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                        <If.Then>
+                                                          <ui:LogMessage DisplayName="Log Message (Inscription de l'heure non éditable)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_45" Level="Info" Message="[&quot;&gt; Traitement BM : Champ de l'heure de la cause constatée non éditable&quot;]" />
+                                                        </If.Then>
+                                                        <If.Else>
+                                                          <Sequence sap2010:Annotation.AnnotationText="Mettre la variable AgoraDateConstatStr avant mise en production" DisplayName="Sinon on inscrit l'heure" sap:VirtualizedContainerService.HintSize="376,399" sap2010:WorkflowViewState.IdRef="Sequence_76">
+                                                            <sap:WorkflowViewStateService.ViewState>
+                                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                              </scg:Dictionary>
+                                                            </sap:WorkflowViewStateService.ViewState>
+                                                            <ui:LogMessage DisplayName="Log Message (Inscription de l'heure)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_46" Level="Info" Message="[&quot;&gt; Traitement BM : Inscription de l'heure de la cause constatée&quot;]" />
+                                                            <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DisplayName="Inscrit l'heure de la cause constatée" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_18" SimulateType="True" Text="[io_GarbageCollector(&quot;AgoraDateConstatee&quot;).ToString]">
+                                                              <ui:TypeInto.Target>
+                                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="354c11af-1f6b-42f0-a1e0-a5cfb4b30f80" InformativeScreenshot="b8a7327fc1f471ca1f58e705bf0d44c6" Selector="&lt;webctrl aria-role='textbox' tag='INPUT' type='text' name='permfixpromisedate' aaname='Date/Heure mise en HS:' /&gt;" WaitForReady="COMPLETE">
+                                                                  <ui:Target.TimeoutMS>
+                                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                                  </ui:Target.TimeoutMS>
+                                                                </ui:Target>
+                                                              </ui:TypeInto.Target>
+                                                            </ui:TypeInto>
+                                                          </Sequence>
+                                                        </If.Else>
+                                                      </If>
+                                                    </Sequence>
+                                                  </ActivityAction>
+                                                </ui:BrowserScope.Body>
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                              </ui:BrowserScope>
+                                            </Sequence>
+                                          </ActivityAction>
+                                        </ui:RetryScope.ActivityBody>
+                                        <ui:RetryScope.Condition>
+                                          <ActivityFunc x:TypeArguments="x:Boolean" />
+                                        </ui:RetryScope.Condition>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:RetryScope>
+                                    </Sequence>
+                                    <Sequence x:Key="I" DisplayName="Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="610,1775" sap2010:WorkflowViewState.IdRef="Sequence_82">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message (Code général Inconnu)" sap:VirtualizedContainerService.HintSize="568,91" sap2010:WorkflowViewState.IdRef="LogMessage_62" Level="Info" Message="[&quot;Le Code Général est: &quot;+io_GarbageCollector(&quot;AudaceGeneral&quot;).ToString+&quot; donc le Statut Audace est Inconnu&quot;]" />
+                                      <Assign DisplayName="Assign Etat inconnu" sap:VirtualizedContainerService.HintSize="568,60" sap2010:WorkflowViewState.IdRef="Assign_43">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceStatut")]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Object">["Inconnu"]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:RetryScope DisplayName="Retry Scope Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="568,1452" sap2010:WorkflowViewState.IdRef="RetryScope_6" NumberOfRetries="3" RetryInterval="00:00:05">
+                                        <ui:RetryScope.ActivityBody>
+                                          <ActivityAction>
+                                            <Sequence DisplayName="Retry Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="526,1278" sap2010:WorkflowViewState.IdRef="Sequence_81">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <If Condition="[RetryScopeNumberGeneral &lt;&gt; 0]" DisplayName="If Failed Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="484,238" sap2010:WorkflowViewState.IdRef="If_13">
+                                                <If.Then>
+                                                  <ui:LogMessage DisplayName="Log Message Failed Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_47" Level="Warn" Message="[&quot;&gt; Retry Number &quot; + RetryScopeNumberGeneral.ToString + &quot; Code général Inconnu&quot;]" />
+                                                </If.Then>
+                                              </If>
+                                              <Assign DisplayName="Increment retryScopeNumber Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="484,60" sap2010:WorkflowViewState.IdRef="Assign_44">
+                                                <Assign.To>
+                                                  <OutArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral]</OutArgument>
+                                                </Assign.To>
+                                                <Assign.Value>
+                                                  <InArgument x:TypeArguments="x:Int32">[RetryScopeNumberGeneral + 1]</InArgument>
+                                                </Assign.Value>
+                                              </Assign>
+                                              <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="484,808" sap2010:WorkflowViewState.IdRef="BrowserScope_10" InformativeScreenshot="7669f41be2c2f89a25f3107f6c096fb2" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                                <ui:BrowserScope.Body>
+                                                  <ActivityAction x:TypeArguments="x:Object">
+                                                    <ActivityAction.Argument>
+                                                      <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                                    </ActivityAction.Argument>
+                                                    <Sequence DisplayName="Do Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="376,662" sap2010:WorkflowViewState.IdRef="Sequence_80">
+                                                      <sap:WorkflowViewStateService.ViewState>
+                                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                        </scg:Dictionary>
+                                                      </sap:WorkflowViewStateService.ViewState>
+                                                      <ui:LogMessage DisplayName="Log Message (Selection Statut Agora pour le cas Inconnu)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_53" Level="Info" Message="[&quot;Selection du Statut Agora en: &quot;+in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut Code général &quot;Inconnu&quot;" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_19" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="91e5ed3c-79ae-472c-9f74-71cc2c837a42" InformativeScreenshot="a2538a85c167b024391e500f6dedd7d7" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                      <ui:LogMessage DisplayName="Log Message (Saisie du commentaire OT pour le cas Inconnu)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_54" Level="Info" Message="[&quot;Saisie dans le champ Commentaire OT: |Audace| Etat inconnu&quot;]" />
+                                                      <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Champ &quot;Commentaire OT&quot; dans AGORA Code général &quot;Inconnu&quot;" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_20" Text="|Audace| Etat inconnu">
+                                                        <ui:TypeInto.Target>
+                                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="1a99a6c0-5e6a-4ef6-9a12-e0c35b33127a" InformativeScreenshot="e784052c1610741185a52b51e5ff4b65" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                            <ui:Target.TimeoutMS>
+                                                              <InArgument x:TypeArguments="x:Int32" />
+                                                            </ui:Target.TimeoutMS>
+                                                          </ui:Target>
+                                                        </ui:TypeInto.Target>
+                                                      </ui:TypeInto>
+                                                    </Sequence>
+                                                  </ActivityAction>
+                                                </ui:BrowserScope.Body>
+                                              </ui:BrowserScope>
+                                            </Sequence>
+                                          </ActivityAction>
+                                        </ui:RetryScope.ActivityBody>
+                                        <ui:RetryScope.Condition>
+                                          <ActivityFunc x:TypeArguments="x:Boolean" />
+                                        </ui:RetryScope.Condition>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:RetryScope>
+                                    </Sequence>
+                                  </Switch>
+                                  <FlowStep.Next>
+                                    <FlowStep x:Name="__ReferenceID0">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <av:Point x:Key="ShapeLocation">350,1037</av:Point>
+                                          <av:Size x:Key="ShapeSize">200,66</av:Size>
+                                          <av:PointCollection x:Key="ConnectorLocation">450,1103 450,1147</av:PointCollection>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <Sequence DisplayName="Get Statut après Traitement" sap:VirtualizedContainerService.HintSize="200,66" sap2010:WorkflowViewState.IdRef="Sequence_95">
+                                        <Sequence.Variables>
+                                          <Variable x:TypeArguments="x:String" Name="AgoraStatutApresTraitement" />
+                                        </Sequence.Variables>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraGetValue workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_13" UnSafe="False" WorkflowFileName="Library\Agora\AgoraGetValue.xaml">
+                                          <ui:InvokeWorkflowFile.Arguments>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_Value">[AgoraStatutApresTraitement]</OutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_AANameTextField" />
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_AANameComboBox">Statut</InArgument>
+                                          </ui:InvokeWorkflowFile.Arguments>
+                                        </ui:InvokeWorkflowFile>
+                                        <Assign DisplayName="Assign Garbage Collector AgoraStatutApresTraitement" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_62">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AgoraStatutApresTraitement")]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:Object">[AgoraStatutApresTraitement]</InArgument>
+                                          </Assign.Value>
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                        </Assign>
+                                      </Sequence>
+                                      <FlowStep.Next>
+                                        <FlowStep x:Name="__ReferenceID12">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <av:Point x:Key="ShapeLocation">350,1147</av:Point>
+                                              <av:Size x:Key="ShapeSize">200,66</av:Size>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <Sequence DisplayName="Enregistrement de l'OT" sap:VirtualizedContainerService.HintSize="200,66" sap2010:WorkflowViewState.IdRef="Sequence_96">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AgoraSaveOT workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Library\Agora\AgoraSaveOT.xaml">
+                                              <ui:InvokeWorkflowFile.Arguments>
+                                                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                                              </ui:InvokeWorkflowFile.Arguments>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:InvokeWorkflowFile>
+                                          </Sequence>
+                                        </FlowStep>
+                                      </FlowStep.Next>
+                                    </FlowStep>
+                                  </FlowStep.Next>
+                                </FlowStep>
+                              </FlowStep.Next>
+                            </FlowStep>
+                          </FlowDecision.True>
+                          <FlowDecision.False>
+                            <FlowSwitch x:TypeArguments="x:String" x:Name="__ReferenceID2" DisplayName="Flow Switch" Expression="[AudaceCodeErreur]" sap:VirtualizedContainerService.HintSize="70,87" sap2010:WorkflowViewState.IdRef="FlowSwitch`1_2">
+                              <FlowSwitch.Default>
+                                <FlowStep x:Name="__ReferenceID5">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <av:Point x:Key="ShapeLocation">630,803.5</av:Point>
+                                      <av:Size x:Key="ShapeSize">200,153</av:Size>
+                                      <av:PointCollection x:Key="ConnectorLocation">730,956.5 730,1070 550,1070</av:PointCollection>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Sequence sap2010:Annotation.AnnotationText="Webservice « etat-equipement » &#xA;&#xA;En cas d'Erreur 10003, 10004 ou 10005" DisplayName="Code Erreur 10003 - 4 - 5 « etat-equipement »" sap:VirtualizedContainerService.HintSize="200,153" sap2010:WorkflowViewState.IdRef="Sequence_34">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:LogMessage DisplayName="Log Message (Code Erreur 10003 - 4 - 5 « etat-equipement »)" sap:VirtualizedContainerService.HintSize="516,91" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;Webservice « etat-equipement ». Le code Alarm est: &quot; +  AudaceCodeErreur]" />
+                                    <Switch x:TypeArguments="x:String" DisplayName="Switch Audace Code Alarm Error" Expression="[AudaceCodeErreur]" sap:VirtualizedContainerService.HintSize="516,1459" sap2010:WorkflowViewState.IdRef="Switch`1_2">
+                                      <Switch.Default>
+                                        <Sequence DisplayName="Code erreur Audace inconnu" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_55">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <ui:LogMessage DisplayName="Log Message (Code erreur Audace inconnu) " sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_29" Level="Error" Message="[&quot;&gt; Audace a retourné un code erreur inconnu: &quot;+ AudaceCodeErreur]" />
+                                          <Throw DisplayName="Throw Business  (Code erreur Audace inconnu) " Exception="[New BusinessRuleException(&quot;Audace a retourné un code erreur inconnu: &quot;+ AudaceCodeErreur)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_1" />
+                                        </Sequence>
+                                      </Switch.Default>
+                                      <Sequence x:Key="10003" DisplayName="La version XXX n'est pas supportée" sap:VirtualizedContainerService.HintSize="376,383" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:LogMessage DisplayName="Log Message Code alarme 10003" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;&gt; Audace a retourné le code ereur : 10003 - La version XXX n'est pas supportée&quot;]" />
+                                        <Assign DisplayName="Assign Audace Libelle Erreur 10003" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:String">[AudaceLibelle]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:String">La version XXX n'est pas supportée</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                        <Assign DisplayName="Assign GarbageCollector Audace Libelle Erreur 10003" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:Object">[AudaceLibelle]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                      </Sequence>
+                                      <Sequence x:Key="10004" DisplayName="Aucun code BM transmis" sap:VirtualizedContainerService.HintSize="376,383" sap2010:WorkflowViewState.IdRef="Sequence_32">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:LogMessage DisplayName="Log Message Code alarme 10004" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;&gt; Audace a retourné le code erreur : 10004 - Aucun code BM transmis&quot;]" />
+                                        <Assign DisplayName="Assign Audace Libelle Erreur 10004" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_14">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:String">[AudaceLibelle]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:String">["Aucun code BM transmis"]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                        <Assign DisplayName="Assign GarbageCollector Audace Libelle Erreur 10004" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:Object">[AudaceLibelle]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                      </Sequence>
+                                      <Sequence x:Key="10005" DisplayName="l'interrogation directe n'est pas autorisée pour la table d'échange de l'équipement" sap:VirtualizedContainerService.HintSize="476,1231" sap2010:WorkflowViewState.IdRef="Sequence_33">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:LogMessage DisplayName="Log Message Code alarme 10005" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;&gt; Audace a retourné le code erreur : 10005 - l'interrogation directe n'est pas autorisée pour la table d'échange de l'équipement&quot;]" />
+                                        <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Agora Add Field Commentaire OT Code erreur 10005" sap:VirtualizedContainerService.HintSize="434,1008" sap2010:WorkflowViewState.IdRef="BrowserScope_13" InformativeScreenshot="efd4e0008cf41361cce0e5ba3214410d" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                          <ui:BrowserScope.Body>
+                                            <ActivityAction x:TypeArguments="x:Object">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Add Field Commentaire OT Code erreur 10005" sap:VirtualizedContainerService.HintSize="376,862" sap2010:WorkflowViewState.IdRef="Sequence_92">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <Assign DisplayName="Assign Audace Libelle Erreur 10005" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_56">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:String">[AudaceLibelle]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:String">["l'interrogation directe n'est pas autorisée pour la table d'échange de l'équipement"]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                                <Assign DisplayName="Assign GarbageCollector Audace Libelle Erreur 10005" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_57">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:Object">[AudaceLibelle]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                                <ui:LogMessage DisplayName="Log Message (Modification Statut dans Agora 10005)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_66" Level="Info" Message="[&quot;&gt; Modification Statut dans Agora: &quot; + in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                                <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut Code Erreur 10005" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_24" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                                  <ui:TypeInto.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="79d724e5-abdd-488a-b5b5-495ab5927696" InformativeScreenshot="a2538a85c167b024391e500f6dedd7d7" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' class='form-required-field x-form-required-field x-form-text ' /&gt;" WaitForReady="COMPLETE">
+                                                      <ui:Target.TimeoutMS>
+                                                        <InArgument x:TypeArguments="x:Int32" />
+                                                      </ui:Target.TimeoutMS>
+                                                    </ui:Target>
+                                                  </ui:TypeInto.Target>
+                                                </ui:TypeInto>
+                                                <ui:LogMessage DisplayName="Log Message (Champ &quot;Commentaire OT&quot; dans AGORA 10005)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_67" Level="Info" Message="[&quot;&gt; Ajout Commentaire OT dans Agora: |Audace| Equipement non supervisable&quot;]" />
+                                                <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Met à jour le champ &quot;Commentaire OT&quot; dans Agora 10005" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_25" Text="|Audace| Equipement non supervisable">
+                                                  <ui:TypeInto.Target>
+                                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a9a28034-855c-49ff-bfb3-08d7301c4fcb" InformativeScreenshot="301b9d7f98198616401cc86dae360ed2" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                      <ui:Target.TimeoutMS>
+                                                        <InArgument x:TypeArguments="x:Int32" />
+                                                      </ui:Target.TimeoutMS>
+                                                    </ui:Target>
+                                                  </ui:TypeInto.Target>
+                                                </ui:TypeInto>
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:BrowserScope.Body>
+                                        </ui:BrowserScope>
+                                      </Sequence>
+                                    </Switch>
+                                  </Sequence>
+                                  <FlowStep.Next>
+                                    <x:Reference>__ReferenceID0</x:Reference>
+                                  </FlowStep.Next>
+                                </FlowStep>
+                              </FlowSwitch.Default>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">695,576.5</av:Point>
+                                  <av:Size x:Key="ShapeSize">70,87</av:Size>
+                                  <av:PointCollection x:Key="10001Connector">695,620 450,620 450,686.04</av:PointCollection>
+                                  <av:PointCollection x:Key="10002Connector">765,620 1010,620 1010,683.5</av:PointCollection>
+                                  <av:PointCollection x:Key="Default">730,663.5 730,803.5</av:PointCollection>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <FlowStep x:Key="10002" x:Name="__ReferenceID4">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <av:Point x:Key="ShapeLocation">910,683.5</av:Point>
+                                    <av:Size x:Key="ShapeSize">200,183</av:Size>
+                                    <av:PointCollection x:Key="ConnectorLocation">1010,866.5 1010,1070 550,1070</av:PointCollection>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Sequence sap2010:Annotation.AnnotationText="Webservice « etat-equipement » &#xA;&#xA;Erreur 10002: &quot;Erreur lors de l’interrogation directe de l’équipement.&quot;&#xA;Equipement non supervisable" DisplayName="Code Erreur 10002 « etat-equipement »" sap:VirtualizedContainerService.HintSize="200,183" sap2010:WorkflowViewState.IdRef="Sequence_36">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:LogMessage DisplayName="Log Message (Code Erreur 10002 « etat-equipement »)" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;Code Erreur 10002 « etat-equipement »: Equipement non supervisable. Erreur lors de l’interrogation directe de l’équipement&quot;]" />
+                                  <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Agora Add Field Commentaire OT Code erreur 1002" sap:VirtualizedContainerService.HintSize="434,1008" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="efd4e0008cf41361cce0e5ba3214410d" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                    <ui:BrowserScope.Body>
+                                      <ActivityAction x:TypeArguments="x:Object">
+                                        <ActivityAction.Argument>
+                                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                        </ActivityAction.Argument>
+                                        <Sequence DisplayName="Add Field Commentaire OT Code erreur 1002" sap:VirtualizedContainerService.HintSize="376,862" sap2010:WorkflowViewState.IdRef="Sequence_56">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <Assign DisplayName="Assign Audace Libelle Erreur 10002" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_32">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:String">[AudaceLibelle]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:String">Aucun état n’est disponible pour cet équipement depuis le SCE par défaut</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                          <Assign DisplayName="Assign GarbageCollector Audace Libelle Erreur 10002" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_33">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:Object">[AudaceLibelle]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                          <ui:LogMessage DisplayName="Log Message (Modification Statut dans Agora)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;&gt; Modification Statut dans Agora: &quot; + in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString]" />
+                                          <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Changement du statut Code Erreur 10002" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_2" Text="[in_Config(&quot;AgoraStatutAttenteRobot&quot;).ToString+&quot;[k(enter)]&quot;]">
+                                            <ui:TypeInto.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="79d724e5-abdd-488a-b5b5-495ab5927696" InformativeScreenshot="a2538a85c167b024391e500f6dedd7d7" Selector="&lt;webctrl aria-role='combobox' tag='INPUT' type='text' name='workorderstatus' aaname='Statut:' class='form-required-field x-form-required-field x-form-text ' /&gt;" WaitForReady="COMPLETE">
+                                                <ui:Target.TimeoutMS>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:Target.TimeoutMS>
+                                              </ui:Target>
+                                            </ui:TypeInto.Target>
+                                          </ui:TypeInto>
+                                          <ui:LogMessage DisplayName="Log Message (Champ &quot;Commentaire OT&quot; dans AGORA)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[&quot;&gt; Ajout Commentaire OT dans Agora: |Audace| Equipement non supervisable&quot;]" />
+                                          <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Met à jour le champ &quot;Commentaire OT&quot; dans Agora" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_3" Text="|Audace| Equipement non supervisable">
+                                            <ui:TypeInto.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a9a28034-855c-49ff-bfb3-08d7301c4fcb" InformativeScreenshot="301b9d7f98198616401cc86dae360ed2" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                <ui:Target.TimeoutMS>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:Target.TimeoutMS>
+                                              </ui:Target>
+                                            </ui:TypeInto.Target>
+                                          </ui:TypeInto>
+                                        </Sequence>
+                                      </ActivityAction>
+                                    </ui:BrowserScope.Body>
+                                  </ui:BrowserScope>
+                                </Sequence>
+                                <FlowStep.Next>
+                                  <x:Reference>__ReferenceID0</x:Reference>
+                                </FlowStep.Next>
+                              </FlowStep>
+                              <FlowStep x:Key="10001" x:Name="__ReferenceID3">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <av:Point x:Key="ShapeLocation">350,686.04</av:Point>
+                                    <av:Size x:Key="ShapeSize">200,168</av:Size>
+                                    <av:PointCollection x:Key="ConnectorLocation">450,854.04 450,1037</av:PointCollection>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Sequence sap2010:Annotation.AnnotationText="Webservice « etat-equipement » &#xA;&#xA;Erreur 10001: &quot;Aucun équipement ne correspond au code BM fourni&quot;" DisplayName="Code Erreur 10001 « etat-equipement »" sap:VirtualizedContainerService.HintSize="200,168" sap2010:WorkflowViewState.IdRef="Sequence_35">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:LogMessage DisplayName="Log Message (Code Erreur 10001 « etat-equipement »)" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;Code Erreur 10001 « etat-equipement »: Aucun équipement ne correspond au code BM fourni&quot;]" />
+                                  <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Agora Code Erreur 10001" sap:VirtualizedContainerService.HintSize="434,703" sap2010:WorkflowViewState.IdRef="BrowserScope_2" InformativeScreenshot="4bfc39c74d5227f5edc2ce5c9f6d9ae9" Selector="&lt;html htmlwindowname='main_eam' title='Infor EAM' /&gt;">
+                                    <ui:BrowserScope.Body>
+                                      <ActivityAction x:TypeArguments="x:Object">
+                                        <ActivityAction.Argument>
+                                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                                        </ActivityAction.Argument>
+                                        <Sequence DisplayName="Do Agora Code Erreur 10001" sap:VirtualizedContainerService.HintSize="376,557" sap2010:WorkflowViewState.IdRef="Sequence_57">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <Assign DisplayName="Assign Audace Libelle Erreur 10001" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_30">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:String">[AudaceLibelle]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:String">["Aucun équipement ne correspond au code BM fourni"]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                          <Assign DisplayName="Assign GarbageCollector Audace Libelle Erreur 10001" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_31">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:Object">[io_GarbageCollector("AudaceLibelle")]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:Object">[AudaceLibelle]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                          <ui:LogMessage DisplayName="Log Message (Code Erreur 10001 Champ &quot;Commentaire OT&quot; dans AGORA)" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;&gt; Ajout Commentaire OT dans Agora: |Audace| Absence equipement&quot;]" />
+                                          <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" DisplayName="Type Into Champ &quot;Commentaire OT&quot; dans AGORA" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" Text="|Audace| Absence equipement">
+                                            <ui:TypeInto.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="290982fa-036d-4f80-8a52-8787029390aa" InformativeScreenshot="301b9d7f98198616401cc86dae360ed2" Selector="&lt;webctrl tag='TEXTAREA' name='workaddress' aaname='Commentaire OT:' /&gt;" WaitForReady="COMPLETE">
+                                                <ui:Target.TimeoutMS>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:Target.TimeoutMS>
+                                              </ui:Target>
+                                            </ui:TypeInto.Target>
+                                          </ui:TypeInto>
+                                        </Sequence>
+                                      </ActivityAction>
+                                    </ui:BrowserScope.Body>
+                                  </ui:BrowserScope>
+                                </Sequence>
+                                <FlowStep.Next>
+                                  <x:Reference>__ReferenceID0</x:Reference>
+                                </FlowStep.Next>
+                              </FlowStep>
+                            </FlowSwitch>
+                          </FlowDecision.False>
+                        </FlowDecision>
+                      </FlowStep.Next>
+                    </FlowStep>
+                  </FlowStep.Next>
+                </FlowStep>
+              </FlowStep.Next>
+            </FlowStep>
+          </FlowStep.Next>
+        </FlowStep>
+      </FlowStep.Next>
+    </FlowStep>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+    <x:Reference>__ReferenceID7</x:Reference>
+    <x:Reference>__ReferenceID8</x:Reference>
+    <x:Reference>__ReferenceID9</x:Reference>
+    <x:Reference>__ReferenceID10</x:Reference>
+    <x:Reference>__ReferenceID11</x:Reference>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID12</x:Reference>
+  </Flowchart>
+</Activity>
